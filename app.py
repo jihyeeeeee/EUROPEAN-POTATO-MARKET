@@ -115,8 +115,23 @@ with st.sidebar:
         uploaded_pdf = st.file_uploader("JRC Bulletin (PDF)", type="pdf")
         uploaded_csv = st.file_uploader("Market Indices (CSV)", type="csv")
         if uploaded_csv:
-            st.session_state.market_df = pd.read_csv(uploaded_csv)
-            st.success("CSV Data Loaded")
+            try:
+                # Try common encodings: UTF-8, then Korean regional, then Latin-1
+                encodings = ['utf-8', 'euc-kr', 'cp1252']
+                success = False
+                for enc in encodings:
+                    try:
+                        uploaded_csv.seek(0)
+                        st.session_state.market_df = pd.read_csv(uploaded_csv, encoding=enc)
+                        st.success(f"CSV Loaded using {enc.upper()} encoding")
+                        success = True
+                        break
+                    except (UnicodeDecodeError, pd.errors.ParserError):
+                        continue
+                if not success:
+                    st.error("Failed to decode CSV. Please ensure it is in UTF-8 or EUC-KR format.")
+            except Exception as e:
+                st.error(f"Error reading CSV: {str(e)}")
 
     st.info("💡 Tip: Upload the latest JRC bulletin to update the Summary and Preview tabs automatically.")
 
