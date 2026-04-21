@@ -1,0 +1,13 @@
+{
+  "name": "eu-market-insight-pro-streamlit",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m streamlit run app.py --server.port 3000 --server.address 0.0.0.0",
+    "build": "python3 -m pip install -r requirements.txt || pip3 install -r requirements.txt || pip install -r requirements.txt || echo 'Could not install requirements'",
+    "start": "python3 -m streamlit run app.py --server.port 3000 --server.address 0.0.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
